@@ -39,6 +39,7 @@ const subPageReducer = (state = null, action) => {
 };
 
 export const fetchSub = (subredditName, sortBy) => {
+  console.log(`fetch sub---------${subredditName}`)
   return async (dispatch) => {
     const sub = await subService.getSubreddit(subredditName, sortBy, 10, 1);
 

@@ -317,3 +317,67 @@ module.exports = {
   deleteReply,
   updateReply,
 };
+
+// const Post = require('../models/post');
+// const User = require('../models/user');
+// const numOfComments = require('../utils/numOfComments');
+// const { createNotification } = require('../controllers/notificationController');
+
+// const postComment = async (req, res) => {
+//   const { id } = req.params;
+//   const { comment } = req.body;
+
+//   if (!comment) {
+//     return res.status(400).send({ message: `Comment body can't be empty.` });
+//   }
+
+//   const post = await Post.findById(id);
+//   const user = await User.findById(req.user);
+
+//   if (!post) {
+//     return res.status(404).send({
+//       message: `Post with ID: ${id} does not exist in database.`,
+//     });
+//   }
+
+//   if (!user) {
+//     return res.status(404).send({ message: 'User does not exist in database.' });
+//   }
+
+//   // Add the comment to the post
+//   post.comments = post.comments.concat({
+//     commentedBy: user._id,
+//     commentBody: comment,
+//     upvotedBy: [user._id],
+//     pointsCount: 1,
+//   });
+//   post.commentCount = numOfComments(post.comments);
+//   const savedPost = await post.save();
+//   const populatedPost = await savedPost
+//     .populate('comments.commentedBy', 'username')
+//     .execPopulate();
+
+//   user.karmaPoints.commentKarma++;
+//   user.totalComments++;
+//   await user.save();
+
+//   const addedComment = populatedPost.comments[savedPost.comments.length - 1];
+//   res.status(201).json(addedComment);
+
+//   // Send notification to the post owner
+//   const postOwner = await User.findById(post.userId);
+//   if (postOwner) {
+//     const notification = await createNotification({
+//       userId: postOwner._id,
+//       title: 'New Comment on Your Post',
+//       description: `${user.username} commented: "${comment}"`,
+//     });
+
+//     // Emit the notification using Socket.IO
+//     req.io.emit(`notification-${postOwner._id}`, {
+//       title: notification.title,
+//       description: notification.description,
+//       time: new Date().toLocaleTimeString(),
+//     });
+//   }
+// };

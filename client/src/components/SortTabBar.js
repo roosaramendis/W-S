@@ -1,5 +1,8 @@
 import React from 'react';
 import { ReactComponent as Best } from '../svg/best.svg';
+import { ReactComponent as Leaderboard } from '../svg/top.svg';
+
+
 import { ReactComponent as Hot } from '../svg/hot.svg';
 import { ReactComponent as New } from '../svg/new.svg';
 import { ReactComponent as Top } from '../svg/top.svg';
@@ -55,6 +58,24 @@ const SortTabBar = ({ sortBy, handleTabChange, subscribedTab, user }) => {
           label="Best"
           value="best"
         />
+        {/* <Tab
+          icon={
+            <SvgIcon fontSize="small">
+              <Leaderboard/>
+            </SvgIcon>
+          }
+          label="Question Leaderboard"
+          value="qlb"
+        />
+           <Tab
+          icon={
+            <SvgIcon fontSize="small">
+ <Leaderboard/>
+             </SvgIcon>
+          }
+          label="Answer Leaderboard"
+          value="alb"
+        /> */}
         <Tab
           icon={
             <SvgIcon fontSize="small">

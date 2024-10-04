@@ -7,6 +7,7 @@ const {
   removeUserAvatar,
   updateUser,
   updatebirthyear,
+  getUsernameById,
 } = require('../controllers/user');
 
 const router = express.Router();
@@ -28,5 +29,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 router.put('/birth-year', updatebirthyear);
+router.get('/name/:id',getUsernameById)
 
 module.exports = router;

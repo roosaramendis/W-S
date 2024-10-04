@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
-import SubForm from './SubForm';
+import React, { useState } from "react";
+import SubForm from "./SubForm";
+import { useNavigate } from "react-router-dom";
 
-import { DialogTitle } from './CustomDialogTitle';
+import { DialogTitle } from "./CustomDialogTitle";
 import {
   Dialog,
   DialogContent,
   Button,
   MenuItem,
   ListItemIcon,
-} from '@material-ui/core';
-import { useDialogStyles } from '../styles/muiStyles';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+} from "@material-ui/core";
+import { useDialogStyles } from "../styles/muiStyles";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { ReactComponent as Top } from "../svg/top.svg";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import DescriptionIcon from '@material-ui/icons/Description';
+import FeedbackIcon from '@material-ui/icons/Feedback';
+// import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 const SubFormModal = ({ type, handleCloseMenu }) => {
   const classes = useDialogStyles();
@@ -31,7 +39,7 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
 
   return (
     <div>
-      {type !== 'menu' ? (
+      {type !== "menu" ? (
         <Button
           color="primary"
           variant="contained"
@@ -41,7 +49,7 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
           size="large"
           startIcon={<AddCircleIcon />}
         >
-          Create New 
+          Create New
         </Button>
       ) : (
         <MenuItem onClick={handleOpenMenu}>
@@ -63,6 +71,160 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
           <SubForm />
         </DialogContent>
       </Dialog>
+      {type !== "menu" ? (
+        <Link to="/leaderboard">
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.createSubBtn}
+            size="large"
+            startIcon={<TrendingUpIcon />}
+          >
+            Leaderboard
+          </Button>
+        </Link>
+      ) : (
+        <MenuItem>
+          <Link to="/leaderboard">
+            <ListItemIcon>
+              <TrendingUpIcon style={{ marginRight: 7 }} />
+              Leaderboard
+            </ListItemIcon>
+          </Link>
+        </MenuItem>
+      )}
+
+      {type !== "menu" ? (
+        <Link to="/report">
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.createSubBtn}
+            size="large"
+            startIcon={<DescriptionIcon />}
+          >
+            Reports
+          </Button>
+        </Link>
+      ) : (
+        <MenuItem>
+          <Link to="/report">
+            <ListItemIcon>
+              <DescriptionIcon style={{ marginRight: 7 }} />
+              Report
+            </ListItemIcon>
+          </Link>
+        </MenuItem>
+      )}
+      {type !== "menu" ? (
+        <Link to="/tagmanage">
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.createSubBtn}
+            size="large"
+            startIcon={<LocalOfferIcon />}
+          >
+            Tag Management
+          </Button>
+        </Link>
+      ) : (
+        <MenuItem>
+          <Link to="/tagmanage">
+            <ListItemIcon>
+              <LocalOfferIcon style={{ marginRight: 7 }} />
+              Tag Management
+            </ListItemIcon>
+          </Link>
+        </MenuItem>
+      )}
+      {type !== "menu" ? (
+        <Link to="/feedback">
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.createSubBtn}
+            size="large"
+            startIcon={<FeedbackIcon />}
+          >
+            FeedBack
+          </Button>
+        </Link>
+      ) : (
+        <MenuItem>
+          <Link to="/feedback">
+            <ListItemIcon>
+              <FeedbackIcon style={{ marginRight: 7 }} />
+              FeedBack
+            </ListItemIcon>
+          </Link>
+        </MenuItem>
+      )}
+      {
+        type !== "menu" ? (
+          <Link to="/article">
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              className={classes.createSubBtn}
+              size="large"
+              startIcon={<TrendingUpIcon />}
+            >
+              Article
+            </Button>
+          </Link>
+        ) : (
+          <MenuItem>
+            <Link to="/article">
+              <ListItemIcon>
+                <AddCircleIcon style={{ marginRight: 7 }} />
+                Article
+              </ListItemIcon>
+            </Link>
+          </MenuItem>
+        )
+      }
+      {/* <Link to="/leaderboard">
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.createSubBtn}
+          size="large"
+          startIcon={<TrendingUpIcon />}
+        >
+          Leaderboard
+        </Button>
+      </Link>
+      <Link to="/feedback">
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.createSubBtn}
+          size="large"
+          startIcon={<TrendingUpIcon />}
+        >
+          FeedBack
+        </Button>
+      </Link>
+      <Link to="/tagmanage">
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.createSubBtn}
+          size="large"
+          startIcon={<TrendingUpIcon />}
+        >
+          Tag Management
+        </Button>
+      </Link> */}
     </div>
   );
 };

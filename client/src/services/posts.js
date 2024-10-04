@@ -11,6 +11,8 @@ const setConfig = () => {
 };
 
 const getPosts = async (sortBy, limit, page) => {
+  console.log('---------------')
+
   const response = await axios.get(
     `${baseUrl}/?sortby=${sortBy}&limit=${limit}&page=${page}`
   );
@@ -33,6 +35,7 @@ const getSearchResults = async (query, limit, page) => {
 };
 
 const addNew = async (postObj) => {
+  console.log(postObj);
   const response = await axios.post(`${baseUrl}`, postObj, setConfig());
   return response.data;
 };

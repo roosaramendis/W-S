@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import { addComment } from '../reducers/postCommentsReducer';
 import { notify } from '../reducers/notificationReducer';
 import getErrorMsg from '../utils/getErrorMsg';
-
+import axios from 'axios';
 import { Link, Typography, TextField, Button } from '@material-ui/core';
 import { useCommentInputStyles } from '../styles/muiStyles';
 import SendIcon from '@material-ui/icons/Send';
 
-const CommentInput = ({ user, postId, isMobile }) => {
+const CommentInput = ({ user, postId, isMobile, author, title }) => {
   const classes = useCommentInputStyles();
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
@@ -64,6 +64,21 @@ const CommentInput = ({ user, postId, isMobile }) => {
           startIcon={<SendIcon />}
           size={isMobile ? 'small' : 'medium'}
           disabled={!user || submitting}
+          onClick={async () => {
+            try {
+              const response = await axios.post('http://localhost:3005/api/notification/create', {
+                reciverId: author.id,
+                senderId: user.id,
+                reciverEmail: user.email,
+                title: "New Answer",
+                description: `${user.username} added a new answer to your question ${title}.`,
+                
+              });
+              console.log('Notification sent successfully:', response.data);
+            } catch (error) {
+              console.error('Error sending notification:', error);
+            }
+          }}
         >
           {!user ? 'Login to comment' : submitting ? 'Commenting' : 'Comment'}
         </Button>

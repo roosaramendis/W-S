@@ -28,10 +28,13 @@ const AddPostModal = ({
   handleMenuClose,
   postToEditType,
   postToEditTitle,
+  postToEditCategory,
+  postToEditTag,
   postToEditSub,
   postToEditId,
   textSubmission,
   linkSubmission,
+
   fromSubreddit,
 }) => {
   const [open, setOpen] = useState(false);
@@ -142,6 +145,8 @@ const AddPostModal = ({
             postType={postType}
             postToEditType={postToEditType}
             postToEditTitle={postToEditTitle}
+            postToEditCategory={postToEditCategory}
+            postToEditTag={postToEditTag}
             postToEditSub={postToEditSub}
             postToEditId={postToEditId}
             textSubmission={textSubmission}

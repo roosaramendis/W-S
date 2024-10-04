@@ -95,6 +95,8 @@ const PostCommentsPage = () => {
     commentCount,
     createdAt,
     updatedAt,
+    category,
+    tags,
   } = post;
 
   const isUpvoted = user && upvotedBy.includes(user.id);
@@ -221,6 +223,8 @@ const PostCommentsPage = () => {
                   isMobile={isMobile}
                   title={title}
                   postType={postType}
+                  category={category}
+                  tags={tags} 
                   subreddit={subreddit}
                   buttonType="buttonGroup"
                   textSubmission={textSubmission}
@@ -228,7 +232,12 @@ const PostCommentsPage = () => {
                 />
               )}
             </div>
-            <CommentInput user={user} postId={id} isMobile={isMobile} />
+            {/* pass the author email to commentInput*/}
+
+
+            <CommentInput user={user} postId={id} isMobile={isMobile} author={author} title={post.title} />
+            
+            
             <SortCommentsMenu />
           </div>
         </div>
