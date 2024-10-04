@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const Post = require('../models/post');
+const mongoose = require("mongoose");
+
 const { cloudinary, UPLOAD_PRESET } = require('../utils/config');
 const paginateResults = require('../utils/paginateResults');
 
@@ -92,5 +94,36 @@ const removeUserAvatar = async (req, res) => {
   await user.save();
   res.status(204).end();
 };
+const getUsernameById = async (req, res) => {
+  const { id } = req.params; // Expecting the user ID in the request parameters
 
-module.exports = { getUser, setUserAvatar, removeUserAvatar };
+  if (!id) {
+    return res.status(400).send({ message: "User ID is required." });
+  }
+
+  try {
+    // Ensure the id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ message: "Invalid user ID format." });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(id).select("username"); // Only select the username field
+
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: `User with ID '${id}' does not exist.` });
+    }
+
+    res.status(200).json({ username: user.username });
+  } catch (error) {
+    console.error("Error retrieving username by ID:", error);
+    res
+      .status(500)
+      .send({ message: "Error retrieving username by ID.", error });
+  }
+};
+
+
+module.exports = { getUser, setUserAvatar, removeUserAvatar ,getUsernameById};

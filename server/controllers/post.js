@@ -53,6 +53,111 @@ const getPosts = async (req, res) => {
   res.status(200).json(paginatedPosts);
 };
 
+
+
+// Controller function to get all posts sorted by date for the tag report
+const getAllPostsTagReport = async (req, res) => {
+  try {
+    const posts = await Post.find({})
+      .select('title category tags createdAt') // Select the fields you want to return
+      .sort({ createdAt: -1 }) // Sort by date (newest first)
+      .populate('author', 'username'); // Populate author if needed
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching posts', error });
+  }
+};
+
+
+
+const getUserPoints = async (req, res) => {
+  
+  try {
+    const users = await User.aggregate([
+      {
+        $lookup: {
+          from: 'posts', 
+          localField: '_id',
+          foreignField: 'author',
+          as: 'posts',
+        },
+      },
+      {
+        $project: {
+          _id: 1, // Return user ID
+          username: 1, // Include username for reference (optional)
+          pointsCount: { $sum: '$posts.pointsCount' }, // Sum of points from all posts by the user
+        },
+      },
+    ]);
+
+    if (users.length === 0) {
+      return res.status(404).send({ message: 'No users found.' });
+    }
+
+    res.status(200).json(users);
+    // return "hello"
+  } catch (error) {
+    res.status(500).send({ message: 'Error retrieving user points.', error });
+  }
+};
+// {
+//   "_id": "user123",
+//   "username": "johnDoe",
+//   "posts": [
+//     { "title": "Post 1", "pointsCount": 10 },
+//     { "title": "Post 2", "pointsCount": 20 },
+//     { "title": "Post 3", "pointsCount": 30 }
+//   ]
+// }
+
+
+// getUserAnswerPoints
+
+const getUserAnswerPoints = async (req, res) => {
+  try {
+    // Get all posts
+    const posts = await Post.find().populate('comments.commentedBy', 'username pointsCount');
+
+    if (!posts.length) {
+      return res.status(404).json({ message: 'No posts found.' });
+    }
+
+    // Map through posts and aggregate points for each user
+    const userPoints = posts.reduce((acc, post) => {
+      post.comments.forEach(comment => {
+        if (comment.commentedBy) {
+          const userId = comment.commentedBy._id.toString();
+          if (!acc[userId]) {
+            acc[userId] = {
+              username: comment.commentedBy.username,
+              totalPoints: 0,
+            };
+          }
+          acc[userId].totalPoints += comment.pointsCount;
+        }
+      });
+      return acc;
+    }, {});
+
+    // Convert the aggregated points to an array for easier response
+    const response = Object.values(userPoints);
+
+    if (!response.length) {
+      return res.status(404).json({ message: 'No users with answers found.' });
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Error retrieving user answer points:', error);
+    res.status(500).json({ message: 'Error retrieving user answer points.', error });
+  }
+};
+
+
+
+
 const getSubscribedPosts = async (req, res) => {
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
@@ -133,6 +238,30 @@ const getSearchedPosts = async (req, res) => {
   res.status(200).json(paginatedPosts);
 };
 
+const getSearchedPostsByTag = async (req, res) => {
+  try {
+    const { tags } = req.body; // Tags are expected to be passed in the request body as an array
+
+    if (!tags || tags.length === 0) {
+      return res.status(400).json({ message: "No tags provided." });
+    }
+
+    // Fetch posts that match any of the tags in the tags array
+    const posts = await Post.find({ tags: { $in: tags } }).populate("author subreddit");
+
+    if (posts.length === 0) {
+      return res.status(404).json({ message: "No posts found for the given tags." });
+    }
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while fetching posts by tags." });
+  }
+};
+
+
+
 const getPostAndComments = async (req, res) => {
   const { id } = req.params;
 
@@ -154,6 +283,7 @@ const getPostAndComments = async (req, res) => {
 };
 
 const createNewPost = async (req, res) => {
+
   const {
     title,
     subreddit,
@@ -161,6 +291,8 @@ const createNewPost = async (req, res) => {
     textSubmission,
     linkSubmission,
     imageSubmission,
+    tags,
+    category,
   } = req.body;
 
   const validatedFields = postTypeValidator(
@@ -191,6 +323,8 @@ const createNewPost = async (req, res) => {
     author: author._id,
     upvotedBy: [author._id],
     pointsCount: 1,
+    tags,
+    category,
     ...validatedFields,
   });
 
@@ -352,4 +486,8 @@ module.exports = {
   createNewPost,
   updatePost,
   deletePost,
+  getSearchedPostsByTag,
+  getUserPoints,
+  getUserAnswerPoints,
+  getAllPostsTagReport,
 };

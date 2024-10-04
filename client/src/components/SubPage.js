@@ -121,6 +121,8 @@ const SubPage = () => {
   };
 
   const handleEditDescription = async () => {
+    console.log(`----------handle tab change----------`)
+
     try {
       await dispatch(editDescription(id, descInput));
       setEditOpen(false);
@@ -133,6 +135,8 @@ const SubPage = () => {
   };
 
   const handleTabChange = async (e, newValue) => {
+    console.log(`----------handle tab change----------`)
+
     try {
       setPostsLoading(true);
       await dispatch(fetchSub(sub, newValue));

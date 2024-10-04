@@ -8,6 +8,11 @@ const {
   createNewPost,
   updatePost,
   deletePost,
+  getSearchedPostsByTag,
+  getUserPoints,
+  getUserAnswerPoints,
+  getUserTotalAnswerPoints,
+  getAllPostsTagReport,
 } = require('../controllers/post');
 const { upvotePost, downvotePost } = require('../controllers/postVote');
 const {
@@ -29,7 +34,12 @@ const router = express.Router();
 
 //CRUD posts routes
 router.get('/', getPosts);
+router.get('/point/questions',getUserPoints);
+router.get('/point/answers',getUserAnswerPoints);
+
+router.get('/tag-report', getAllPostsTagReport);
 router.get('/search', getSearchedPosts);
+router.post('/searchbytag', getSearchedPostsByTag);
 router.get('/:id/comments', getPostAndComments);
 router.get('/subscribed', auth, getSubscribedPosts);
 router.post('/', auth, createNewPost);

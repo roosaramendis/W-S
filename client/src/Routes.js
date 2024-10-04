@@ -1,16 +1,26 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import PostFormModal from './components/PostFormModal';
-import PostList from './components/PostList';
-import PostCommentsPage from './components/PostCommentsPage';
-import UserPage from './components/UserPage';
-import SubPage from './components/SubPage';
-import TopSubsPanel from './components/TopSubsPanel';
-import SearchResults from './components/SearchResults';
-import NotFoundPage from './components/NotFoundPage';
-
-import { Container } from '@material-ui/core/';
-import { useMainPaperStyles } from './styles/muiStyles';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import PostFormModal from "./components/PostFormModal";
+import PostList from "./components/PostList";
+import PostCommentsPage from "./components/PostCommentsPage";
+import UserPage from "./components/UserPage";
+import SubPage from "./components/SubPage";
+import TopSubsPanel from "./components/TopSubsPanel";
+import SearchResults from "./components/SearchResults";
+import TagBasedSearchResults from "./components/TagBasedSearchResults"; // Import the new component
+import NotFoundPage from "./components/NotFoundPage";
+import TagReport from "./components/TagReport";
+import { Container } from "@material-ui/core/";
+import { useMainPaperStyles } from "./styles/muiStyles";
+import LeaderBoard from "./components/LeaderBoard";
+import ReportPage from "./components/ReportPage";
+import QLeaderBoardReport from "./components/QLeaderBoardReport";
+import ALeaderBoardReport from "./components/ALeaderBoardReport";
+import NotificationReport from "./components/NotificationReport";
+import FeedBackPage from "./components/FeedBackPage";
+import TagManagementPage from "./components/TagManagementPage";
+import ArticlePage from "./components/ArticlePage";
+import ArticleViewPage from "./components/ArticleViewPage";
 
 const Routes = () => {
   const classes = useMainPaperStyles();
@@ -37,6 +47,41 @@ const Routes = () => {
       </Route>
       <Route exact path="/search/:query">
         <SearchResults />
+      </Route>
+      <Route exact path="/tags/:tags">
+        {" "}
+        {/* Add this route */}
+        <TagBasedSearchResults />
+      </Route>
+      <Route exact path="/leaderboard">
+        <LeaderBoard />
+      </Route>
+      <Route exact path="/report">
+        <ReportPage />
+      </Route>
+      <Route exact path="/tagreport">
+        <TagReport />
+      </Route>
+      <Route exact path="/qleaderboard">
+        <QLeaderBoardReport />
+      </Route>
+      <Route exact path="/aleaderboard">
+        <ALeaderBoardReport />
+      </Route>
+      <Route exact path="/notificationreport">
+        <NotificationReport />
+      </Route>
+      <Route exact path="/feedback">
+        <FeedBackPage />
+      </Route>
+      <Route exact path="/tagmanage">
+        <TagManagementPage />
+      </Route>
+      <Route exact path="/article">
+        <ArticlePage />
+      </Route>
+      <Route exact path="/article/:title">
+        <ArticleViewPage />
       </Route>
       <Route>
         <NotFoundPage />

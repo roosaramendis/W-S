@@ -19,6 +19,7 @@ const getSubreddit = async (subredditName, sortBy, limit, page) => {
   const response = await axios.get(
     `${baseUrl}/r/${subredditName}/?sortby=${sortBy}&limit=${limit}&page=${page}`
   );
+
   return response.data;
 };
 

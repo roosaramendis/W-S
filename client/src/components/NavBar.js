@@ -6,6 +6,10 @@ import { notify } from '../reducers/notificationReducer';
 import MobileUserMenu from './MobileUserMenu';
 import DesktopUserMenu from './DesktopUserMenu';
 import SearchBar from './SearchBar';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+// import { Link } from 'react-router-dom';
+
+
 import {
   AppBar,
   Toolbar,
@@ -21,6 +25,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 // Import your custom logo
 import CustomLogo from '../assets/logo.png';  // Adjust the path as needed
+import NotificationPanal from './NotificationPanal';
 
 const NavBar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -73,8 +78,27 @@ const NavBar = () => {
                   </Link>
                 </Typography>
               </div>
+            
               {!isMobile && <SearchBar />}
             </div>
+            {/* <Link to="/leaderboard" ><Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.createSubBtn}
+          size="large"
+          startIcon={<TrendingUpIcon/>}
+        >
+          
+        </Button></Link> */}
+             {/* <Link
+                    href={"/leaderboard"}
+                    color="inherit"
+                    target="_blank"
+                    rel="noopener"
+                  >hello
+                  </Link> */}
+            
             {isMobile ? (
               <>
                 <IconButton
@@ -87,14 +111,22 @@ const NavBar = () => {
                 <MobileUserMenu user={user} handleLogout={handleLogout} />
               </>
             ) : (
+              <>
+              {user && 
+                <NotificationPanal user={user}/>
+              }
+              
               <DesktopUserMenu user={user} handleLogout={handleLogout} />
+              </>
             )}
           </>
         )}
         {searchOpen && isMobile && (
           <SearchBar isMobile={true} setSearchOpen={setSearchOpen} />
         )}
+        
       </Toolbar>
+      
     </AppBar>
   );
 };

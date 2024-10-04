@@ -181,9 +181,13 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           </Link>
           <Typography variant="caption" className={classes.userAndDate}>
             Posted by{' '}
+            {author ? (
             <Link component={RouterLink} to={`/u/${author.username}`}>
               u/{author.username}
-            </Link>{' '}
+            </Link>
+             ) : (
+              'Deleted User'
+            )}{' '}
             • <TimeAgo datetime={new Date(createdAt)} />
             {createdAt !== updatedAt && '*'}
           </Typography>
@@ -193,12 +197,12 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
             startIcon={<CommentIcon />}
             className={classes.commentsBtn}
             component={RouterLink}
-            to={`/comments/${id}`}
+            to={id ? `/comments/${id}` : '#'}
             size={isMobile ? 'small' : 'medium'}
           >
             {commentCount} comments
           </Button>
-          {user && user.id === author.id && (
+          {user && author && user.id === author.id && (
             <EditDeleteMenu
               id={id}
               isMobile={isMobile}

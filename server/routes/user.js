@@ -4,6 +4,7 @@ const {
   getUser,
   setUserAvatar,
   removeUserAvatar,
+  getUsernameById,
 } = require('../controllers/user');
 
 const router = express.Router();
@@ -11,5 +12,6 @@ const router = express.Router();
 router.get('/:username', getUser);
 router.post('/avatar', auth, setUserAvatar);
 router.delete('/avatar', auth, removeUserAvatar);
+router.get('/name/:id',getUsernameById)
 
 module.exports = router;

@@ -109,6 +109,15 @@ const postSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
+  tags: {
+    type: [String], // Array of strings for tags
+    default: [], // Default empty array
+  },
+  category:{
+    
+    type:String,
+    required:true
+  },
   pointsCount: {
     type: Number,
     default: 1,

@@ -13,6 +13,8 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 const EditDeleteMenu = ({
   id,
   title,
+  tag,
+  category,
   postType,
   subreddit,
   buttonType,
@@ -45,6 +47,8 @@ const EditDeleteMenu = ({
     }
   };
 
+console.log('EditDeleteMenu.js: tag:', tag);
+
   return (
     <div>
       {buttonType === 'buttonGroup' ? (
@@ -54,6 +58,8 @@ const EditDeleteMenu = ({
             handleMenuClose={handleClose}
             postToEditType={postType}
             postToEditTitle={title}
+            postToEditCategory={category}
+            postToEditTag={tag}
             postToEditSub={subreddit}
             postToEditId={id}
             textSubmission={textSubmission}
@@ -82,6 +88,8 @@ const EditDeleteMenu = ({
                 handleMenuClose={handleClose}
                 postToEditType={postType}
                 postToEditTitle={title}
+                postToEditCategory={category}
+                postToEditTag={tag}
                 postToEditSub={subreddit}
                 postToEditId={id}
                 textSubmission={textSubmission}
