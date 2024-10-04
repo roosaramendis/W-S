@@ -9,7 +9,8 @@ import TopSubsPanel from "./components/TopSubsPanel";
 import SearchResults from "./components/SearchResults";
 import TagBasedSearchResults from "./components/TagBasedSearchResults"; // Import the new component
 import NotFoundPage from "./components/NotFoundPage";
-import TagReport from "./components/TagReport";
+import TagReport from "./components/TagReport";import SettingsPage from './components/SettingsPage';
+
 import { Container } from "@material-ui/core/";
 import { useMainPaperStyles } from "./styles/muiStyles";
 import LeaderBoard from "./components/LeaderBoard";
@@ -47,6 +48,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/search/:query">
         <SearchResults />
+      </Route>
+      <Route exact path="/settings/:username"> 
+        <SettingsPage />
       </Route>
       <Route exact path="/tags/:tags">
         {" "}

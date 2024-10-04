@@ -78,6 +78,19 @@ const { commentSchema } = require('./post');
 
 const userSchema = new mongoose.Schema(
   {
+
+    birthyear: {
+      type: String,
+      minlength: 3,
+      maxlength: 20,
+      
+    },
+
+    role: { 
+      type: String, 
+      enum: ['admin', 'user'], 
+      default: 'user' 
+    },
     username: {
       type: String,
       minlength: 3,
@@ -89,8 +102,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true, // Ensures each email is unique
-      // match: /^[a-zA-Z0-9._%+-]+@my\.sliit\.lk$/, // Validates SLIIT email format
-      match: /^[a-zA-Z0-9._%+-]+@gmail\.com$/, // Validates Gmail email format
+      match: /^[a-zA-Z0-9._%+-]+@my\.sliit\.lk$/, // Validates SLIIT email format
       trim: true,
     },
     passwordHash: {

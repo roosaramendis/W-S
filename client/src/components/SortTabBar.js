@@ -17,7 +17,10 @@ const SortTabBar = ({ sortBy, handleTabChange, subscribedTab, user }) => {
   const classes = useSortTabStyles();
 
   return (
-    <Paper variant="outlined" className={classes.mainPaper}>
+    <Paper variant='outlined' className={classes.mainPaper}>
+      <div 
+          className={classes.gradientLine}
+        />
       <Tabs
         value={sortBy}
         onChange={handleTabChange}

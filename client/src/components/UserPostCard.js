@@ -79,7 +79,10 @@ const UserPostCard = ({ post, user, isMobile }) => {
       : textSubmission.slice(0, 100).concat('....'));
 
   return (
-    <Paper variant="outlined" className={classes.mainPaper}>
+    <Paper elevation={3} className={classes.root}>
+      <div 
+          className={classes.gradientLine}
+        />
       <div className={classes.votesWrapper}>
         <UpvoteButton
           user={user}

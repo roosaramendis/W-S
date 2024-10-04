@@ -94,6 +94,63 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { SECRET } = require('../utils/config');
 
+
+const OtpModel = require('../models/Otp');
+const { sendEmail } = require('../utils/sendEmail'); // Assume this function is defined to handle email sending
+
+const sendOtpToEmail = async (req, res) => {
+  const { email } = req.body;
+
+  // Generate a random 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  try {
+    // Store the OTP in the database (or update if it already exists for the email)
+    await OtpModel.findOneAndUpdate(
+      { email },
+      { otp, createdAt: new Date() },
+      { upsert: true, new: true }
+    );
+
+    // Send the OTP to the user's email
+    await sendEmail(email, `Your OTP Code is ${otp}`);
+
+    return res.status(200).json({ message: "OTP sent successfully!" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error sending OTP", error });
+  }
+};
+
+
+const verifyOtp = async (req, res) => {
+  console.log("verify func called");
+  
+  const { email, otp } = req.body;
+  console.log(otp);
+  console.log(email);
+  try {
+    // Fetch the stored OTP for the email from the database
+    console.log("verify func called try");
+    const storedOtp = await OtpModel.findOne({ email });
+    
+    console.log(storedOtp.otp);
+
+    if (!storedOtp || storedOtp.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+      console.log("Invalid OTP");
+    }
+
+    // OTP is valid, optionally delete the OTP after verification
+    await OtpModel.deleteOne({ email });
+    console.log("OTP verified successfully");
+    return res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Error verifying OTP", error });
+  }
+};
+
+
 const loginUser = async (req, res) => {
   console.log(req.body);
   const { email, password } = req.body;
@@ -156,10 +213,10 @@ const signupUser = async (req, res) => {
 
 
 
-  if (!email || !email.endsWith('@gmail.com')) {
+  if (!email || !email.endsWith('@my.sliit.lk')) {
     return res
       .status(400)
-      .send({ message: 'Invalid email.' });
+      .send({ message: 'Invalid email. Must be an SLIIT email (my.sliit.lk).' });
   }
 
   const existingEmail = await User.findOne({ email });
@@ -181,6 +238,9 @@ const signupUser = async (req, res) => {
     });
   }
 
+  const userCount = await User.countDocuments();
+  const role = userCount === 0 ? 'admin' : 'user';
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -188,6 +248,7 @@ const signupUser = async (req, res) => {
     username,
     email,
     passwordHash,
+    role,
   });
 
   const savedUser = await user.save();
@@ -205,7 +266,8 @@ const signupUser = async (req, res) => {
     id: savedUser._id,
     avatar: savedUser.avatar,
     karma: 0,
+    role: savedUser.role,
   });
 };
 
-module.exports = { loginUser, signupUser };
+module.exports = { loginUser, signupUser, sendOtpToEmail, verifyOtp };

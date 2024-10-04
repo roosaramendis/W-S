@@ -198,6 +198,7 @@ import ErrorPage from './ErrorPage';
 import LoadMoreButton from './LoadMoreButton';
 import LoadingSpinner from './LoadingSpinner';
 import getErrorMsg from '../utils/getErrorMsg';
+import { Link as RouterLink } from 'react-router-dom'
 
 import {
   Container,
@@ -205,6 +206,7 @@ import {
   useMediaQuery,
   Typography,
   Avatar,
+  Button,
 } from '@material-ui/core';
 import { useUserPageStyles } from '../styles/muiStyles';
 import { useTheme } from '@material-ui/core/styles';
@@ -266,6 +268,7 @@ const UserPage = () => {
     posts,
     totalComments,
     karmaPoints,
+    role,
   } = userInfo.userDetails;
 
   const handleLoadPosts = async () => {
@@ -299,7 +302,7 @@ const UserPage = () => {
               </Avatar>
             )}
             <Typography variant="h6" color="secondary">
-              Name: {userName}
+            {role}: {userName}
             </Typography>
             <Typography variant="h6" color="secondary">
               Email: {email}
@@ -347,6 +350,16 @@ const UserPage = () => {
                   Comment Count <strong>{karmaPoints.commentKarma}</strong>
                 </Typography>
               </div>
+              <Button
+                variant="outlined"
+                color="primary"
+                //startIcon={<SettingsIcon />}
+                component={RouterLink}
+                to={`/settings/${username}`}
+              >
+                Edit Settings
+              </Button>
+
             </div>
           </div>
         </Paper>

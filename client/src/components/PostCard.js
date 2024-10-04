@@ -91,7 +91,13 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
   const formattedLink = trimLink(prettifyLink(linkToShow), 30);
 
   return (
-    <Paper className={classes.root} variant="outlined">
+    <Paper elevation={3} className={classes.root} fullwidth >
+      
+      
+      
+      <div 
+          className={classes.gradientLine}
+        />
       <div className={classes.votesWrapper}>
         <UpvoteButton
           user={user}
@@ -124,7 +130,8 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
       <div className={classes.thumbnailWrapper}>
         {postType === 'Text' ? (
           <RouterLink to={`/comments/${id}`}>
-            <Paper elevation={0} square className={classes.thumbnail}>
+            <Paper elevation={3} square className={classes.thumbnail}>
+              
               <MessageIcon
                 fontSize="inherit"
                 className={classes.thumbnailIcon}
@@ -134,7 +141,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           </RouterLink>
         ) : postType === 'Link' ? (
           <a href={fixUrl(linkSubmission)} target="_noblank">
-            <Paper elevation={0} square className={classes.thumbnail}>
+            <Paper elevation={3} square className={classes.thumbnail}>
               <LinkIcon
                 fontSize="inherit"
                 className={classes.thumbnailIcon}
@@ -143,7 +150,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
             </Paper>
           </a>
         ) : (
-          <Paper elevation={0} square className={classes.thumbnail}>
+          <Paper elevation={3} square className={classes.thumbnail}>
             <CardMedia
               className={classes.thumbnail}
               image={getEditedThumbail(imageSubmission.imageLink)}
@@ -156,6 +163,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
         )}
       </div>
       <div className={classes.postInfoWrapper}>
+       
         <Typography variant="h6" className={classes.title}>
           {title}{' '}
           <Typography variant="caption" color="primary" className={classes.url}>
@@ -215,6 +223,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           )}
         </div>
       </div>
+      
     </Paper>
   );
 };
