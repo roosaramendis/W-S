@@ -91,7 +91,13 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
   const formattedLink = trimLink(prettifyLink(linkToShow), 30);
 
   return (
-    <Paper className={classes.root} variant="outlined">
+    <Paper elevation={3} className={classes.root} fullwidth >
+      
+      
+      
+      <div 
+          className={classes.gradientLine}
+        />
       <div className={classes.votesWrapper}>
         <UpvoteButton
           user={user}
@@ -124,7 +130,8 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
       <div className={classes.thumbnailWrapper}>
         {postType === 'Text' ? (
           <RouterLink to={`/comments/${id}`}>
-            <Paper elevation={0} square className={classes.thumbnail}>
+            <Paper elevation={3} square className={classes.thumbnail}>
+              
               <MessageIcon
                 fontSize="inherit"
                 className={classes.thumbnailIcon}
@@ -134,7 +141,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           </RouterLink>
         ) : postType === 'Link' ? (
           <a href={fixUrl(linkSubmission)} target="_noblank">
-            <Paper elevation={0} square className={classes.thumbnail}>
+            <Paper elevation={3} square className={classes.thumbnail}>
               <LinkIcon
                 fontSize="inherit"
                 className={classes.thumbnailIcon}
@@ -143,7 +150,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
             </Paper>
           </a>
         ) : (
-          <Paper elevation={0} square className={classes.thumbnail}>
+          <Paper elevation={3} square className={classes.thumbnail}>
             <CardMedia
               className={classes.thumbnail}
               image={getEditedThumbail(imageSubmission.imageLink)}
@@ -156,6 +163,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
         )}
       </div>
       <div className={classes.postInfoWrapper}>
+       
         <Typography variant="h6" className={classes.title}>
           {title}{' '}
           <Typography variant="caption" color="primary" className={classes.url}>
@@ -181,9 +189,13 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           </Link>
           <Typography variant="caption" className={classes.userAndDate}>
             Posted by{' '}
+            {author ? (
             <Link component={RouterLink} to={`/u/${author.username}`}>
               u/{author.username}
-            </Link>{' '}
+            </Link>
+             ) : (
+              'Deleted User'
+            )}{' '}
             • <TimeAgo datetime={new Date(createdAt)} />
             {createdAt !== updatedAt && '*'}
           </Typography>
@@ -193,12 +205,12 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
             startIcon={<CommentIcon />}
             className={classes.commentsBtn}
             component={RouterLink}
-            to={`/comments/${id}`}
+            to={id ? `/comments/${id}` : '#'}
             size={isMobile ? 'small' : 'medium'}
           >
             {commentCount} comments
           </Button>
-          {user && user.id === author.id && (
+          {user && author && user.id === author.id && (
             <EditDeleteMenu
               id={id}
               isMobile={isMobile}
@@ -211,6 +223,7 @@ const PostCard = ({ post, toggleUpvote, toggleDownvote }) => {
           )}
         </div>
       </div>
+      
     </Paper>
   );
 };

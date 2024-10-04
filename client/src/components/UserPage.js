@@ -9,6 +9,7 @@ import ErrorPage from './ErrorPage';
 import LoadMoreButton from './LoadMoreButton';
 import LoadingSpinner from './LoadingSpinner';
 import getErrorMsg from '../utils/getErrorMsg';
+import { Link as RouterLink } from 'react-router-dom'
 
 import {
   Container,
@@ -16,6 +17,7 @@ import {
   useMediaQuery,
   Typography,
   Avatar,
+  Button,
 } from '@material-ui/core';
 import { useUserPageStyles } from '../styles/muiStyles';
 import { useTheme } from '@material-ui/core/styles';
@@ -34,10 +36,11 @@ const UserPage = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [pageError, setPageError] = useState(null);
-
+  console.log(useParams);
   useEffect(() => {
     const getUser = async () => {
       try {
+        
         await dispatch(fetchUser(username));
         setPageLoading(false);
       } catch (err) {
@@ -71,10 +74,12 @@ const UserPage = () => {
   const {
     avatar,
     username: userName,
+    email,
     createdAt,
     posts,
     totalComments,
     karmaPoints,
+    role,
   } = userInfo.userDetails;
 
   const handleLoadPosts = async () => {
@@ -108,8 +113,12 @@ const UserPage = () => {
               </Avatar>
             )}
             <Typography variant="h6" color="secondary">
-              u/{userName}
+            {role}: {userName}
             </Typography>
+            <Typography variant="h6" color="secondary">
+              Email: {email}
+            </Typography>
+
           </div>
           <div className={classes.rightWrapper}>
             <div className={classes.itemWrapper}>
@@ -152,6 +161,16 @@ const UserPage = () => {
                   Comment Count <strong>{karmaPoints.commentKarma}</strong>
                 </Typography>
               </div>
+              <Button
+                variant="outlined"
+                color="primary"
+                //startIcon={<SettingsIcon />}
+                component={RouterLink}
+                to={`/settings/${username}`}
+              >
+                Edit Settings
+              </Button>
+
             </div>
           </div>
         </Paper>

@@ -16,4 +16,14 @@ export const getCircularAvatar = (imageLink) => {
   return [firstPart, transformApi, secondPart].join('');
 };
 
+export const getSquareAvatar = (imageLink) => {
+  const splittedUrl = imageLink.split('image/upload/');
+  const firstPart = splittedUrl[0];
+  const secondPart = splittedUrl[1];
+ 
+  const transformApi = 'w_200,h_200,c_fill/'; 
+
+  return [firstPart, transformApi, secondPart].join('');
+};
+
 export default getEditedThumbnail;

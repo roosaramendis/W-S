@@ -20,6 +20,7 @@ import { useUserMenuStyles } from '../styles/muiStyles';
 import FilterVintageIcon from '@material-ui/icons/FilterVintage';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const DesktopUserMenu = ({ user, handleLogout }) => {
   const classes = useUserMenuStyles();
@@ -83,6 +84,17 @@ const DesktopUserMenu = ({ user, handleLogout }) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
+
+            <MenuItem
+              component={RouterLink}
+              to={`/settings/${loggedUser.username}`} // Link to settings page
+              onClick={handleClose}
+            >
+              <ListItemIcon>
+                <SettingsIcon style={{ marginRight: 7 }} /> Settings
+              </ListItemIcon>
+            </MenuItem>
+
             <MenuItem
               component={RouterLink}
               to={`/u/${loggedUser.username}`}

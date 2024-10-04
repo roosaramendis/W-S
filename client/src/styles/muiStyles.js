@@ -8,6 +8,9 @@ export const useMainPaperStyles = makeStyles(
       flexDirection: 'column',
       flex: 1,
       minHeight: '100vH',
+      borderRadius: 8,
+      
+       
     },
     homepage: {
       minWidth: '98%',
@@ -21,7 +24,11 @@ export const useMainPaperStyles = makeStyles(
     postsPanel: {
       minWidth: '40vW',
       flexGrow: 1,
+      marginBottom: '50px',
+       
     },
+    
+
   }),
   { index: 1 }
 );
@@ -225,17 +232,53 @@ export const usePostListStyles = makeStyles(
 
 export const useCardStyles = makeStyles(
   (theme) => ({
+
+    Paper: {
+      padding: '20px', 
+      marginBottom: '50px', 
+      display: 'flex', 
+      width: '100vW',
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minHeight: '100vH',
+      position: 'relative',
+
+    },
+
+    gradientLine:{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '1px', // Height of the top border
+      background: 'linear-gradient(90deg, rgba(42,42,42,0.05) 5%, rgba(159,159,159,1) 52%, rgba(42,42,42,0.05) 95%)',
+      
+    },
+
     root: {
+      padding: '20px',
       display: 'flex',
       width: 'auto',
       borderRadius: 0,
+      marginBottom: '10px',
+      position: 'relative',
+      borderRadius: 8,
+      '&:hover': {
+        opacity: 0.95,
+        backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.001) 10%, ${theme.palette.primary.main2} 52%, rgba(42,42,42,0.0) 90%)`,
+        backgroundClip: 'padding-box, border-box',
+        
+      }, 
+      
     },
     votesWrapper: {
       display: 'flex',
       flexDirection: 'column',
-      width: 30,
+      width: 45,
       alignItems: 'center',
       backgroundColor: theme.palette.type === 'light' ? '#f7f5f3' : '#2f271f',
+      borderRadius: 30,
     },
     thumbnailWrapper: {
       alignSelf: 'center',
@@ -359,7 +402,7 @@ export const usePostCommentsStyles = makeStyles(
       marginTop: '0.5em',
       display: 'flex',
       flexDirection: 'column',
-      borderRadius: 0,
+      borderRadius: 5,
       minHeight: '90vH',
     },
     topPortion: {
@@ -507,7 +550,7 @@ export const useUserPageStyles = makeStyles(
       marginTop: '0.5em',
       display: 'flex',
       flexDirection: 'column',
-      borderRadius: 0,
+      borderRadius: 5,
       minHeight: '90vH',
       paddingBottom: '1em',
     },
@@ -575,9 +618,50 @@ export const useUserPageStyles = makeStyles(
 
 export const useUserPostCardStyles = makeStyles(
   (theme) => ({
+
+    Paper: {
+      padding: '20px', 
+      marginBottom: '50px', 
+      display: 'flex', 
+      width: '100vW',
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minHeight: '100vH',
+      position: 'relative',
+
+    },
+
+    gradientLine:{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '1px', // Height of the top border
+      background: 'linear-gradient(90deg, rgba(42,42,42,0.05) 5%, rgba(159,159,159,1) 52%, rgba(42,42,42,0.05) 95%)',
+      
+    },
+
+    root: {
+      padding: '20px',
+      display: 'flex',
+      width: 'auto',
+      borderRadius: 0,
+      marginBottom: '10px',
+      position: 'relative',
+      borderRadius: 8,
+      '&:hover': {
+        opacity: 0.95,
+        backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.001) 10%, ${theme.palette.primary.main2} 52%, rgba(42,42,42,0.0) 90%)`,
+        backgroundClip: 'padding-box, border-box',
+        
+      }, 
+      
+    },
+
     mainPaper: {
       display: 'flex',
-      marginBottom: '1em',
+      marginBottom: '10px',
       textDecoration: 'none',
       '&:hover': {
         border: `1px solid ${theme.palette.primary.main}`,
@@ -707,12 +791,21 @@ export const useSubPageStyles = makeStyles(
 export const useSortTabStyles = makeStyles(
   (theme) => ({
     mainPaper: {
-      borderRadius: 0,
+      borderRadius: 5,
       marginBottom: '0.6em',
       [theme.breakpoints.down('xs')]: {
         marginBottom: '0em',
       },
     },
+    gradientLine:{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '1px', // Height of the top border
+      background: 'linear-gradient(90deg, rgba(42,42,42,0.05) 5%, rgba(159,159,159,1) 52%, rgba(42,42,42,0.05) 95%)',
+    },
+
   }),
   { index: 1 }
 );
@@ -851,6 +944,11 @@ export const useAvatarFormStyles = makeStyles(
     submitButton: {
       marginTop: '1.4em',
     },
+
+    input: {
+      marginTop: '1.4em',
+    },
+
     currentAvatar: {
       display: 'flex',
       justifyContent: 'center',

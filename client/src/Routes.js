@@ -8,6 +8,7 @@ import SubPage from './components/SubPage';
 import TopSubsPanel from './components/TopSubsPanel';
 import SearchResults from './components/SearchResults';
 import NotFoundPage from './components/NotFoundPage';
+import SettingsPage from './components/SettingsPage';
 
 import { Container } from '@material-ui/core/';
 import { useMainPaperStyles } from './styles/muiStyles';
@@ -37,6 +38,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/search/:query">
         <SearchResults />
+      </Route>
+      <Route exact path="/settings/:username"> 
+        <SettingsPage />
       </Route>
       <Route>
         <NotFoundPage />

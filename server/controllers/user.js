@@ -7,11 +7,11 @@ const getUser = async (req, res) => {
   const { username } = req.params;
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
-
+  
   const user = await User.findOne({
     username: { $regex: new RegExp('^' + username + '$', 'i') },
-  });
-
+  })
+  console.log(user);
   if (!user) {
     return res
       .status(404)
@@ -35,6 +35,61 @@ const getUser = async (req, res) => {
   };
 
   res.status(200).json({ userDetails: user, posts: paginatedPosts });
+};
+
+const updatebirthyear = async (req, res) => {
+  console.log("updatyear in controller")
+  //const { userId } = req.user; 
+  const { userId, newBirthyear } = req.body;
+  console.log(userId);
+  
+
+  try {
+    // Logic to update the birthyear in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username: newBirthyear },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log(error);
+    console.error('Error updating year:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+const updateUser = async (req, res) => {
+  console.log("updateuser in controller")
+  //const { userId } = req.user; 
+  const { userId, newUsername } = req.body;
+  console.log(userId);
+  console.log(newUsername);
+
+  try {
+    // Logic to update the username in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username: newUsername },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log(error);
+    console.error('Error updating username:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 const setUserAvatar = async (req, res) => {
@@ -93,4 +148,4 @@ const removeUserAvatar = async (req, res) => {
   res.status(204).end();
 };
 
-module.exports = { getUser, setUserAvatar, removeUserAvatar };
+module.exports = { getUser, setUserAvatar, removeUserAvatar, updateUser, updatebirthyear };
