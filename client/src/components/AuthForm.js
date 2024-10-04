@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser, signupUser } from '../reducers/userReducer';
+import { sendOtpToEmail, verifyOtp, loginUser, signupUser } from '../reducers/userReducer';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import { TextInput } from './FormikMuiFields';
@@ -14,6 +14,9 @@ import {
   Divider,
   InputAdornment,
   IconButton,
+  Input,
+  input,
+  TextField,
 } from '@material-ui/core';
 import { useAuthStyles } from '../styles/muiStyles';
 import PersonIcon from '@material-ui/icons/Person';
@@ -33,6 +36,11 @@ const validationSchemaSignup = yup.object({
       /^[a-zA-Z0-9-_]*$/,
       'Only alphanumeric characters allowed, no spaces/symbols'
     ),
+  email: yup
+  .string()
+  .email('Invalid email')
+  .required('Required')
+  .matches(/^[a-zA-Z0-9._%+-]+@my\.sliit\.lk$/, 'Email must be in the format @my.sliit.lk'),
 
   password: yup
     .string()
@@ -41,7 +49,7 @@ const validationSchemaSignup = yup.object({
 });
 
 const validationSchemaLogin = yup.object({
-  username: yup.string().required('Required'),
+  email: yup.string().email('Invalid email').required('Required'),
   password: yup.string().required('Required'),
 });
 
@@ -51,13 +59,54 @@ const AuthForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState(null);
   const classes = useAuthStyles(authType)();
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [email, setEmail] = useState("");
+
+
+
+
+  const handleSendOtp = async (email) => {
+    console.log("send otp func called");
+    try {
+      await dispatch(sendOtpToEmail(email));
+      setOtpSent(true);
+    } catch (error) {
+      console.error("Failed to send OTP", error);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+  
+    try {
+      // Use the email from the state instead of from the form event
+      console.log("email from input");
+      console.log(email);
+      
+      const isOtpValid = await dispatch(verifyOtp(email, otp));
+      console.log("is otp valid");
+      console.log(isOtpValid);
+      if (isOtpValid) {
+        setOtpVerified(true);
+        console.log("email veryfierd")
+        dispatch(notify("Email verifierd sucssesfully"))
+      } else {
+        alert("Invalid OTP");
+      }
+    } catch (error) {
+      console.error("Failed to verify OTP", error);
+    }
+  };
 
   const handleLogin = async (values, { setSubmitting }) => {
     try {
       setSubmitting(true);
       await dispatch(loginUser(values));
+      const usernameFromEmail = values.email.split('@')[0];
       dispatch(
-        notify(`Welcome, ${values.username}. You're logged in!`, 'success')
+        notify(`Welcome, ${usernameFromEmail}. You're logged in!`, 'success')
       );
     } catch (err) {
       setSubmitting(false);
@@ -66,19 +115,27 @@ const AuthForm = () => {
   };
 
   const handleSignup = async (values, { setSubmitting }) => {
-    try {
-      setSubmitting(true);
-      await dispatch(signupUser(values));
-      dispatch(
-        notify(
-          `Welcome, ${values.username}. You've been successfully registered.`,
-          'success'
-        )
-      );
-    } catch (err) {
-      setSubmitting(false);
-      setError(getErrorMsg(err));
-    }
+
+    
+
+    if (otpVerified){
+      try {
+        setSubmitting(true);
+        await dispatch(signupUser(values));
+        dispatch(
+          notify(
+            `Welcome, ${values.username}. You've been successfully registered.`,
+            'success'
+          )
+        );
+      } catch (err) {
+        setSubmitting(false);
+        setError(getErrorMsg(err));
+      }
+  }
+  else{
+    alert("Plz verify email before signup");
+  }
   };
 
   return (
@@ -86,7 +143,7 @@ const AuthForm = () => {
       <div className={classes.authWrapper}>
         <Formik
           validateOnChange={true}
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ username: '', email: '', password: '' }}
           onSubmit={authType === 'login' ? handleLogin : handleSignup}
           validationSchema={
             authType === 'login'
@@ -94,7 +151,7 @@ const AuthForm = () => {
               : validationSchemaSignup
           }
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values }) => (
             <>
               <Form className={classes.form}>
                 <Typography
@@ -106,17 +163,74 @@ const AuthForm = () => {
                     ? 'Login to your account'
                     : 'Create a new account'}
                 </Typography>
+
+                {authType === 'signup' && (
+                  <div className={classes.input}>
+                    <PersonIcon className={classes.inputIcon} color="primary" />
+                    <TextInput
+                      name="username"
+                      type="text"
+                      placeholder="Enter username"
+                      label="Username"
+                      required
+                      fullWidth
+                    />
+                  </div>
+                )}
+
+                
+
                 <div className={classes.input}>
                   <PersonIcon className={classes.inputIcon} color="primary" />
                   <TextInput
-                    name="username"
-                    type="text"
-                    placeholder="Enter username"
-                    label="Username"
+                    name="email"
+                    type="email"
+                    placeholder="Enter SLIIT Email"
+                    label="Email"
+                    value={values.email}
                     required
                     fullWidth
                   />
-                </div>
+                  {authType === 'signup' && (
+                  <Button
+                  type="button" 
+                  onClick={() => {
+                    setEmail(values.email);
+                    handleSendOtp(values.email);  // Send OTP using Formik's values.email
+                  }}
+                  disabled={!values.email || otpSent} 
+                  color="primary"
+                  variant="contained"
+                  className={classes.submitButton}
+                  style={{ marginLeft: '10px' }}
+                >
+                  {otpSent ? 'Email Sent' : 'Verify Email'}
+                </Button>
+                )}
+                </div>    
+
+                {/* OTP input and verify button appear only if OTP has been sent and on signup */}
+                {otpSent && authType === 'signup' && (
+                  <div className={classes.input}>
+                    
+                    <TextField
+                      label="Enter OTP"
+                      //variant="outlined"
+                      fullWidth
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      required
+                    />
+                    <Button type="button" 
+                    onClick={handleVerifyOtp} 
+                    color="primary"
+                    variant="contained"
+                    className={classes.submitButton}
+                    >
+                      Verify OTP
+                    </Button>
+                  </div>
+                )}
                 <div className={classes.input}>
                   <LockIcon className={classes.inputIcon} color="primary" />
                   <TextInput
@@ -154,7 +268,7 @@ const AuthForm = () => {
                     authType === 'login' ? <ExitToAppIcon /> : <PersonAddIcon />
                   }
                   className={classes.submitButton}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || (!otpVerified && authType !== 'login')}
                 >
                   {authType === 'login'
                     ? isSubmitting

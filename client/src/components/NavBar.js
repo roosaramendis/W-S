@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { logoutUser } from '../reducers/userReducer';
 import { notify } from '../reducers/notificationReducer';
 import MobileUserMenu from './MobileUserMenu';
@@ -29,7 +29,9 @@ const NavBar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const classes = useNavStyles();
-
+  const location = useLocation();  
+  //const isSettingsPage = location.pathname === '/settings/${user.username}';
+  const isSettingsPage = location.pathname.includes('/settings');
   const handleLogout = () => {
     dispatch(logoutUser());
     dispatch(notify(`u/${user.username} logged out`, 'success'));
@@ -73,17 +75,19 @@ const NavBar = () => {
                   </Link>
                 </Typography>
               </div>
-              {!isMobile && <SearchBar />}
+              {!isMobile && !isSettingsPage && <SearchBar />}
             </div>
             {isMobile ? (
               <>
-                <IconButton
-                  color="primary"
-                  className={classes.searchBtn}
-                  onClick={() => setSearchOpen((prevState) => !prevState)}
-                >
-                  <SearchIcon />
-                </IconButton>
+                {!isSettingsPage &&(
+                  <IconButton
+                    color="primary"
+                    className={classes.searchBtn}
+                    onClick={() => setSearchOpen((prevState) => !prevState)}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                )}
                 <MobileUserMenu user={user} handleLogout={handleLogout} />
               </>
             ) : (

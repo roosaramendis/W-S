@@ -16,10 +16,127 @@ const userReducer = (state = null, action) => {
       return { ...state, ...action.payload };
     case 'REMOVE_AVATAR':
       return { ...state, avatar: { exists: false } };
+    
+    case 'UPDATE_USERNAME': // Update the username in the state
+    return { ...state, username: action.payload };
+    
+    case 'UPDATE_Birthyear': // Update the username in the state
+    return { ...state, username: action.payload };  
+    //case 'OTP_VERIFIED': // Handle OTP verification
+    //return { ...state, otpVerified: true };  
     default:
       return state;
   }
 };
+
+export const updateUsername = (userId, newUsername, email, password) => {
+  return async (dispatch) => {
+    try {
+      // Make the API call to update the username in MongoDB
+      console.log("updateUsername in userreducer");
+      console.log(userId, newUsername);
+      
+      const updatedUser = await userService.updateUsername(userId, newUsername);
+      
+      // Dispatch an action to update the username in the state
+      dispatch({
+        type: 'UPDATE_USERNAME',
+        payload: updatedUser.username, // Assuming the API returns the updated user data
+      });
+      const credentials = {
+        email: email,
+        password: password, 
+      };
+
+      const loginResponse = await authService.login(credentials);
+      
+      
+      dispatch({
+        type: 'USER_LOGIN_SUCCESS',
+        payload: loginResponse, 
+      });
+
+    
+      localStorage.setItem('authToken', loginResponse.token);
+
+      setUser();
+      
+      console.log(loginResponse.username);
+      storageService.saveUser(loginResponse);
+      console.log("done");
+
+    } catch (error) {
+      console.log(error);
+      console.error('Error updating username:', error);
+      
+      // Handle error state as needed
+    }
+  };
+};
+
+export const updatebirthyear = (userId, newBirthyear) => {
+  return async (dispatch) => {
+    try {
+      // Make the API call to update the username in MongoDB
+     
+      
+      const updatedYear = await userService.updatebirthyear(userId, newBirthyear);
+      
+      // Dispatch an action to update the username in the state
+      dispatch({
+        type: 'UPDATE_Birthyear',
+        payload: updatedYear.newBirthyear, // Assuming the API returns the updated user data
+      });
+      
+    
+
+    } catch (error) {
+      console.log(error);
+      console.error('Error updating birthyear:', error);
+      
+      // Handle error state as needed
+    }
+  };
+};
+
+
+
+// Send OTP action
+export const sendOtpToEmail = (email) => {
+  return async (dispatch) => {
+    try {
+      const response = await authService.sendOtp(email);
+      dispatch({
+        type: 'OTP_SENT',
+        payload: response.message,
+      });
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+    }
+  };
+};
+
+// Verify OTP action
+export const verifyOtp = (email, otp) => {
+  return async (dispatch) => {
+    try {
+      const response = await authService.verifyOtp(email, otp);
+      console.log('Response:', response);
+      dispatch({
+        type: 'OTP_VERIFIED',
+        payload: response.message,
+      });
+      console.log(response.status || response);
+      return response.message === "OTP verified successfully";
+
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      console.log(error);
+      return false;
+    }
+  };
+};
+
 
 export const loginUser = (credentials) => {
   return async (dispatch) => {

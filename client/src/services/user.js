@@ -3,7 +3,7 @@ import backendUrl from '../backendUrl';
 import { token } from './auth';
 
 const baseUrl = `${backendUrl}/api/users`;
-
+const baseUrl1 = `${backendUrl}/api/user`;
 const setConfig = () => {
   return {
     headers: { 'x-auth-token': token },
@@ -31,6 +31,46 @@ const removeAvatar = async () => {
   return response.data;
 };
 
-const userService = { getUser, uploadAvatar, removeAvatar };
+
+const deleteUser = async (userId) => {
+  const response = await axios.delete(`${baseUrl}/${userId}`);
+  return response.data;
+};
+
+
+export const updateUsername = async (userId, newUsername) => {
+  console.log("in user service");
+  console.log(userId, newUsername);
+  try {
+    console.log("in user service try");
+    const response = await axios.put(`${baseUrl}/user-name`, { userId, newUsername }, setConfig()); // Only send newUsername
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error.response ? error.response.data : null; // Return error response if available
+  }
+  
+   // Ensure this returns the updated user data
+};
+
+export const updatebirthyear = async (userId, newBirthyear) => {
+  //console.log("in user service");
+  //console.log(userId, newUsername);
+  try {
+    console.log("in user service try");
+    const response = await axios.put(`${baseUrl}/birth-year`, { userId, newBirthyear }, setConfig()); // Only send newUsername
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error.response ? error.response.data : null; // Return error response if available
+  }
+  
+   // Ensure this returns the updated user data
+};
+
+
+const userService = { getUser, uploadAvatar, removeAvatar, updateUsername, deleteUser, updatebirthyear };
 
 export default userService;
