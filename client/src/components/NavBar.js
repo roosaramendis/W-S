@@ -48,8 +48,22 @@ const NavBar = () => {
         {!searchOpen && (
           <>
             <div className={classes.leftPortion}>
-              <div className={classes.logoWrapper}>
+              <div className={classes.logoWrapper}
+              style={{ 
+                display:"grid",
+                alignItems:"center",
+                textAlign:"center",
+                width:"25%"  // Adjust the value to make the corners more or less rounded
+              }}
+              
+              >
                 <Button
+                  style={{ 
+                    width: '150px', 
+                    height: '100px', 
+                    borderRadius: '15px',
+                    margin:"20px"  // Adjust the value to make the corners more or less rounded
+                  }}
                   className={classes.logo}
                   color="primary"
                   component={RouterLink}
@@ -69,7 +83,22 @@ const NavBar = () => {
                 >
                   
                 </Button>
-                <Typography variant="caption" color="secondary">
+                
+                
+                
+                 
+                <Typography 
+                  variant="caption" 
+                  color="secondary" 
+                  style={{ 
+                    display:"flex",
+                    width:"100%",
+                    textAlign:"center"  // Adjust the value to make the corners more or less rounded
+                  }}
+                
+                >
+
+                  
                   Ideal Chemistry | Bandarawela
                   <Link
                     href={'.'}
@@ -79,6 +108,7 @@ const NavBar = () => {
                   >
                   </Link>
                 </Typography>
+                
               </div>
               {!isMobile && !isSettingsPage && <SearchBar />}
             </div>

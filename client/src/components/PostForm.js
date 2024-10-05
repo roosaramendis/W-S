@@ -358,17 +358,20 @@ const AddPostForm = ({
               <LocalOfferIcon className={classes.inputIcon} color="primary" />
               {actionType === "edit" ? (
                 <Typography style={{ marginTop: 5, marginBottom: 5 }}>
-                  {postToEditTag.map((tag) => (
+                {postToEditTag && postToEditTag.length > 0 ? (
+                  postToEditTag.map((tag) => (
                     <Chip
                       key={tag}
                       label={tag}
                       size="small"
-                      color="darkgray"
                       className={classes.tagBtn}
-                      style={{ marginRight: 5 }}
+                      style={{ marginRight: 5, backgroundColor: 'darkgray', color: 'white' }} // Manually applying the 'darkgray' color
                     />
-                  ))}
-                </Typography>
+                  ))
+                ) : (
+                  <Typography>No tags available</Typography> // Optional: Add a fallback message if there are no tags
+                )}
+              </Typography>
               ) : (
                 <Box style={{ flexGrow: 1 }}>
                   <Autocomplete

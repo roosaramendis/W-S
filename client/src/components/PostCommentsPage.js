@@ -175,9 +175,14 @@ const PostCommentsPage = () => {
               </Link>
               <Typography variant="caption" className={classes.userAndDate}>
                 • Posted by
+                {author?.username ?(
                 <Link component={RouterLink} to={`/u/${author.username}`}>
                   {` u/${author.username} `}
                 </Link>
+                ):(
+                    "Deleted user"
+
+                )}
                 • <TimeAgo datetime={new Date(createdAt)} />
                 {createdAt !== updatedAt && (
                   <em>
@@ -217,7 +222,7 @@ const PostCommentsPage = () => {
                   <Typography variant="subtitle2">{commentCount}</Typography>
                 </ListItemIcon>
               </MenuItem>
-              {user && user.id === author.id && (
+              {user?.id && author?.id && user.id === author.id && (
                 <EditDeleteMenu
                   id={id}
                   isMobile={isMobile}

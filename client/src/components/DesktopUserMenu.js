@@ -6,6 +6,7 @@ import UpdateAvatarModal from './UpdateAvatarModal';
 import DarkModeMenuItem from './DarkModeMenuItem';
 import { getCircularAvatar } from '../utils/cloudinaryTransform';
 import storageService from '../utils/localStorage';
+import NotificationPanel from './NotificationPanal';
 
 import {
   Button,
@@ -15,17 +16,22 @@ import {
   Typography,
   ListItemIcon,
   Divider,
+  Badge,
+  
 } from '@material-ui/core';
 import { useUserMenuStyles } from '../styles/muiStyles';
 import FilterVintageIcon from '@material-ui/icons/FilterVintage';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const DesktopUserMenu = ({ user, handleLogout }) => {
   const classes = useUserMenuStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [notificationCount, setNotificationCount] = useState(0); // Move notificationCount here
+  const [panelOpen, setPanelOpen] = useState(false);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -39,10 +45,60 @@ const DesktopUserMenu = ({ user, handleLogout }) => {
     handleLogout();
   };
 
+  const handlePanelToggle = () => {
+    setPanelOpen((prevState) => !prevState);
+  };
+
   const loggedUser = storageService.loadUser() || user;
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "right",
+        minWidth: "25%",
+        margin: "20px",
+      }}
+    >
+      <NotificationPanel
+          user={loggedUser}
+          notificationCount={notificationCount}
+          setNotificationCount={setNotificationCount}
+          setpanelOpen={panelOpen}
+        />
+
+      <Button
+        style={{ justifyContent:"space-around", marginLeft:"20px" }}
+        color="primary"
+        
+        //onClick={handleClickOpen}
+        
+        className={classes.createSubBtn}
+        size="small"
+        startIcon={<AddCircleIcon />}
+      >
+        Create New
+      </Button>
+
+      <Badge badgeContent={notificationCount} color="error"
+       style={{ margin:"20px" }}
+       
+      >
+        <NotificationsActiveIcon
+          style={{ cursor: 'pointer', alignContent:"center",justifyContent:"center" }}
+          onClick={handlePanelToggle} // Trigger the notification panel toggle
+        />
+      </Badge>
+
+      {panelOpen && (
+        <NotificationPanel
+          user={loggedUser}
+          notificationCount={notificationCount}
+          setNotificationCount={setNotificationCount}
+          setpanelOpen={panelOpen}
+        />
+      )}
+
       {loggedUser ? (
         <>
           <Button onClick={handleMenu} className={classes.userBtn}>
@@ -87,7 +143,7 @@ const DesktopUserMenu = ({ user, handleLogout }) => {
 
             <MenuItem
               component={RouterLink}
-              to={`/settings/${loggedUser.username}`} // Link to settings page
+              to={`/settings/${loggedUser.username}`} 
               onClick={handleClose}
             >
               <ListItemIcon>

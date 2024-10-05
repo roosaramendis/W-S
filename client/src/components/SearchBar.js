@@ -30,7 +30,7 @@ const Tags = ({ data, handleDelete }) => {
         display="flex"
         flexDirection="row"
         alignItems="center"
-        width="auto" // This allows the tag to resize based on the content
+        width={"auto"}
       >
         <Typography>{data}</Typography>
         <Cancel

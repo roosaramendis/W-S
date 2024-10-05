@@ -180,7 +180,11 @@ export const useDialogStyles = makeStyles(
       fontSize: "1.2em",
     },
     createSubBtn: {
-      marginTop: "1em",
+      margin:"10px",
+      //maxWidth: "250px",
+      minWidth:"150px",
+      
+     
     },
     defaultAvatar: {
       backgroundColor: theme.palette.secondary.main,

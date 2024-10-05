@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import { Badge, IconButton, ClickAwayListener, Button } from '@material-ui/core';
+import { ClickAwayListener, IconButton, Button } from '@material-ui/core';
 import axios from 'axios';
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from '@material-ui/icons/Close';
 
-const NotificationPanel = ({ user }) => {
-  const [panelOpen, setPanelOpen] = useState(false);
+const NotificationPanel = ({ user, notificationCount, setNotificationCount, setpanelOpen }) => {
+  const [panelOpen, setPanelOpen] = useState(setpanelOpen);
   const [notifications, setNotifications] = useState([]);
-  const [notificationCount, setNotificationCount] = useState(0);
-
+  //setPanelOpen(setpanelOpen);
+  
   const fetchNotifications = async () => {
     if (user && user.id) {
       try {
+        
         const response = await axios.get(`http://localhost:3005/api/notification/${user.id}`);
         if (response.status === 200) {
           setNotifications(response.data);
@@ -30,14 +30,12 @@ const NotificationPanel = ({ user }) => {
   }, [user]);
 
   const handlePanelToggle = () => {
-    setPanelOpen(!panelOpen);
-    if (!panelOpen) {
-      setNotificationCount(notificationCount);
-    }
+    //setPanelOpen(!panelOpen);
   };
 
   const handleClickAway = () => {
     setPanelOpen(false);
+    
   };
 
   const handleRemoveNotification = async (id) => {
@@ -60,14 +58,8 @@ const NotificationPanel = ({ user }) => {
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <div style={{ position: 'relative', marginRight: 15 }}>
-        <Badge badgeContent={notificationCount} color="error">
-          <NotificationsActiveIcon
-            style={{ cursor: 'pointer' }}
-            onClick={handlePanelToggle}
-          />
-        </Badge>
-
+      <div style={{ position: 'relative' }}>
+      
         {panelOpen && (
           <div
             style={{
@@ -112,10 +104,10 @@ const NotificationPanel = ({ user }) => {
                       </div>
                       <div>
                         <IconButton
-                        size="small"
-                        onClick={() => handleRemoveNotification(notification._id)}
-                      >
-                        <CloseIcon fontSize="small" />
+                          size="small"
+                          onClick={() => handleRemoveNotification(notification._id)}
+                        >
+                          <CloseIcon fontSize="small" />
                         </IconButton>
                       </div>
                     </div>

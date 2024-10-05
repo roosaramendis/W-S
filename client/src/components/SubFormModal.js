@@ -38,9 +38,10 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
   };
 
   return (
-    <div>
+    <div style={{display:"grid",maxWidth:"100%", justifyContent:"space-around",alignItems: 'center', position: 'relative',}} >
       {type !== "menu" ? (
         <Button
+          
           color="primary"
           variant="contained"
           onClick={handleClickOpen}
@@ -95,7 +96,7 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
         </MenuItem>
       )}
 
-      {type !== "menu" ? (
+      {type !== "menu" ? ( // Should move to user settings
         <Link to="/report">
           <Button
             color="primary"
