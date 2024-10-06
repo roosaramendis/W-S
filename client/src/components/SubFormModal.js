@@ -95,7 +95,7 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
           </Link>
         </MenuItem>
       )}
-
+    {/*
       {type !== "menu" ? ( // Should move to user settings
         <Link to="/report">
           <Button
@@ -119,6 +119,8 @@ const SubFormModal = ({ type, handleCloseMenu }) => {
           </Link>
         </MenuItem>
       )}
+      
+      */}
       {type !== "menu" ? (
         <Link to="/tagmanage">
           <Button

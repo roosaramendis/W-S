@@ -9,7 +9,7 @@ import getErrorMsg from '../utils/getErrorMsg';
 import { AppBar, Tabs, Tab, TextField, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle,Avatar, Switch, Divider, Paper } from '@material-ui/core';
 import { useUserPageStyles } from '../styles/muiStyles';
 import { useTheme } from '@material-ui/core/styles';
-import { logoutUser, setAvatar, updateUsername } from '../reducers/userReducer';
+import { logoutUser, setAvatar, updateUsername, updateUserRole } from '../reducers/userReducer';
 import { useHistory } from 'react-router-dom';
 import authService from '../services/auth';
 import { MenuItem } from '@material-ui/core';
@@ -18,7 +18,8 @@ import { getCircularAvatar, getSquareAvatar } from '../utils/cloudinaryTransform
 import UpdateAvatarModal from './UpdateAvatarModal';
 import UpdateAvatarForm from './UpdateAvatarForm';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import DescriptionIcon from '@material-ui/icons/Description';
 
 const SettingsPage = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -142,10 +143,14 @@ const SettingsPage = () => {
           label="Critical Actions"
           className={classes1.tab}
          />
-        <Tab 
-          label="Mods Settings"
-          className={classes1.tab}
-         />
+
+        {role === 'admin' && ( 
+          <Tab 
+            label="Mods Settings"
+            className={classes1.tab}
+          />
+        )}
+
       </Tabs>
 
       {/* Right side content */}
@@ -165,10 +170,11 @@ const SettingsPage = () => {
             userName={userName}
             user={user}
             avatar={avatar}
-            classes={classes}
             handleChangeAvatarClick={handleChangeAvatarClick}
-            showEmail={true}
-            classes1={classes1} role={role}  />
+            classes={classes}
+            classes1={classes1} 
+            role={role}
+            showEmail={true}  />
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
           <ProfileTab
@@ -188,7 +194,7 @@ const SettingsPage = () => {
         <TabPanel value={tabValue} index={3}>
           <CriticalActionsTab searchTerm={searchTerm} />
         </TabPanel>
-        <TabPanel value={tabValue} index={4}>
+        <TabPanel value={tabValue} index={4}>       
           <ModsSettingsTab searchTerm={searchTerm} />
         </TabPanel>
       </div>
@@ -519,7 +525,8 @@ const ModsSettingsTab = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //await updateUserRole(email, role); // Call to the backend (ensure this function is imported)
+      console.log("update role of "+email+" to "+role);
+      await dispatch(updateUserRole(email, role)); // Call to the backend (ensure this function is imported)
       //dispatch(notify('User role updated successfully!'));
       dispatch(notify('User role updated'));
     } catch (error) {
@@ -562,19 +569,35 @@ const ModsSettingsTab = () => {
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </TextField>
-        <Button variant="contained" color="primary" type="submit" style={{align: 'right' }}>
+        <Button 
+        variant="contained" 
+        color="primary" 
+        type="submit" 
+        style={{align: 'right' }}
+        
+        
+        >
           Add Role
         </Button>
       </form>
       </Paper>
-      <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-        View Reports
-      </Button>
+      <Link to="/report">
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            //className={classes.createSubBtn}
+            size="large"
+            startIcon={<DescriptionIcon />}
+          >
+            Reports
+          </Button>
+        </Link>
     </div>
   );
 };
 
-const AllSettings = ({ searchTerm, userName, user, avatar, handleChangeAvatarClick, classes, classes1 }) => {
+const AllSettings = ({ searchTerm, userName, user, avatar, handleChangeAvatarClick, classes, classes1, role }) => {
   // Define all settings with additional searchable properties
   const allSettings = [
     {
@@ -595,7 +618,7 @@ const AllSettings = ({ searchTerm, userName, user, avatar, handleChangeAvatarCli
       buttonName: 'Delete Account',
       component: <CriticalActionsTab user={user} />,
     },
-    {
+    role === 'admin' &&{
       label: 'Mods Settings',
       placeholder: 'Manage moderator settings',
       buttonName: 'Add Role',
@@ -607,7 +630,8 @@ const AllSettings = ({ searchTerm, userName, user, avatar, handleChangeAvatarCli
   const searchTermWords = searchTerm.toLowerCase().split(' '); // Split search term into words
 
 const filteredSettings = allSettings.filter(setting => {
-  const labels = setting.label.toLowerCase().split(',').map(keyword => keyword.trim());
+  const label = setting.label ? setting.label.toLowerCase() : '';
+  const labels = label.split(',').map(keyword => keyword.trim());
   const matchesLabel = searchTermWords.every(word => 
     labels.some(label => label.includes(word))
   );
