@@ -8,6 +8,7 @@ const {
   updateUser,
   updatebirthyear,
   getUsernameById,
+  updateUserRole,
 } = require('../controllers/user');
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 router.put('/birth-year', updatebirthyear);
+router.put('/user-role', updateUserRole);
 router.get('/name/:id',getUsernameById)
 
 module.exports = router;

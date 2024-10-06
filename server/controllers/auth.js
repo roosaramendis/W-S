@@ -192,7 +192,9 @@ const loginUser = async (req, res) => {
 
 const signupUser = async (req, res) => {
   console.log(req.body);
-  const { username, email, password } = req.body;
+  const { username, email, password, role: inputRole } = req.body;
+  console.log("input role: "+inputRole);
+  
 
   if (!email) {
     console.error('Email is missing');
@@ -239,7 +241,16 @@ const signupUser = async (req, res) => {
   }
 
   const userCount = await User.countDocuments();
-  const role = userCount === 0 ? 'admin' : 'user';
+  //const role = userCount === 0 ? 'admin' : 'user';
+
+  let role;  // declare role with let for reassignment
+
+  if (userCount === 0) {
+    role = 'admin';  // assign 'admin' if first user
+  } else {
+    console.log("input role: "+inputRole);
+    role = inputRole || 'user';  // use the provided role or default to 'user'
+  }
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);

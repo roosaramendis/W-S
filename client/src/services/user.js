@@ -70,7 +70,23 @@ export const updatebirthyear = async (userId, newBirthyear) => {
    // Ensure this returns the updated user data
 };
 
+export const updateUserRole = async (email, newRole) => {
+  //console.log("in user service");
+  //console.log(userId, newUsername);
+  console.log("in service update role of "+email+" to "+newRole);
+  try {
+    console.log("in user service try");
+    const response = await axios.put(`${baseUrl}/user-role`, { email, newRole }, setConfig()); // Only send newUsername
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error.response ? error.response.data : null; // Return error response if available
+  }
+  
+   // Ensure this returns the updated user data
+};
 
-const userService = { getUser, uploadAvatar, removeAvatar, updateUsername, deleteUser, updatebirthyear };
+const userService = { getUser, uploadAvatar, removeAvatar, updateUsername, deleteUser, updatebirthyear,updateUserRole };
 
 export default userService;
