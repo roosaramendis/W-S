@@ -39,51 +39,6 @@ const getUser = async (req, res) => {
   res.status(200).json({ userDetails: user, posts: paginatedPosts });
 };
 
-async function getUserIdByEmail(email) {
-  try {
-    const user = await User.findOne({ email }); // Query the user by email
-    if (user) {
-      return user._id; // Return the user ID
-    } else {
-      throw new Error('User not found');
-    }
-  } catch (error) {
-    console.error('Error fetching user by email:', error);
-    throw error; // Handle errors here as needed
-  }
-}
-
-
-const updateUserRole = async (req, res) => {
-  console.log("update user role in controller")
-  //const { userId } = req.user; 
-  const { email, newRole } = req.body;
-
-  let userId = await getUserIdByEmail(email);
-  console.log(userId);
-  
-
-  try {
-    // Logic to update the birthyear in the database
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { role: newRole },
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.log(error);
-    console.error('Error updating year:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-
 const updatebirthyear = async (req, res) => {
   console.log("updatyear in controller")
   //const { userId } = req.user; 
@@ -226,4 +181,4 @@ const getUsernameById = async (req, res) => {
 };
 
 
-module.exports = { getUser, setUserAvatar, removeUserAvatar, updateUser, updatebirthyear ,getUsernameById, updateUserRole};
+module.exports = { getUser, setUserAvatar, removeUserAvatar, updateUser, updatebirthyear ,getUsernameById};
