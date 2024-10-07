@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import { Link } from "react-router-dom/cjs/react-router-dom";
-
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 
 const ReportPage = () => {
-    
   return (
     <div
       style={{
@@ -109,20 +106,19 @@ const ReportPage = () => {
           Notification Reports
         </h3>
         <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
-                      <Link to="/notificationreport">
-
-          <Button
-            variant="contained"
-            color="default"
-            startIcon={<CloudDownloadIcon />}
-            style={{
-              backgroundColor: "#ff9800",
-              color: "#fff",
-              padding: "10px 20px",
-            }}
-          >
-            Notification Report
-          </Button>
+          <Link to="/notificationreport">
+            <Button
+              variant="contained"
+              color="default"
+              startIcon={<CloudDownloadIcon />}
+              style={{
+                backgroundColor: "#ff9800",
+                color: "#fff",
+                padding: "10px 20px",
+              }}
+            >
+              Notification Report
+            </Button>
           </Link>
         </div>
       </div>
@@ -154,6 +150,38 @@ const ReportPage = () => {
           >
             Topic Report
           </Button>
+        </div>
+      </div>
+
+      {/* Posted Questions Report Section */}
+      <div style={{ marginTop: "30px" }}>
+        <h3
+          style={{
+            marginBottom: "20px",
+            fontSize: "26px",
+            fontWeight: "bold",
+            color: "#2c3e50",
+            letterSpacing: "1px",
+            textTransform: "uppercase",
+          }}
+        >
+          Posted Questions Reports
+        </h3>
+        <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+          <Link to="/posted-questions-report">
+            <Button
+              variant="contained"
+              color="default"
+              startIcon={<CloudDownloadIcon />}
+              style={{
+                backgroundColor: "#2196F3", // Blue color for this button
+                color: "#fff",
+                padding: "10px 20px",
+              }}
+            >
+              Posted Questions Report
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
