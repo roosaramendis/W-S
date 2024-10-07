@@ -10,6 +10,17 @@ const setConfig = () => {
   };
 };
 
+const getUserData = async (username) => {
+  try {
+    const response = await axios.get(`${baseUrl}/user/${username}`); // Use the correct endpoint
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    throw error; // Optionally rethrow to handle in the component
+  }
+};
+
+
 const getUser = async (username, limit, page) => {
   const response = await axios.get(
     `${baseUrl}/${username}/?limit=${limit}&page=${page}`
@@ -87,6 +98,6 @@ export const updateUserRole = async (email, newRole) => {
    // Ensure this returns the updated user data
 };
 
-const userService = { getUser, uploadAvatar, removeAvatar, updateUsername, deleteUser, updatebirthyear,updateUserRole };
+const userService = { getUser, uploadAvatar, removeAvatar, updateUsername, deleteUser, updatebirthyear,updateUserRole,getUserData };
 
 export default userService;

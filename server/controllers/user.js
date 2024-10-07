@@ -13,7 +13,7 @@ const getUser = async (req, res) => {
   const user = await User.findOne({
     username: { $regex: new RegExp('^' + username + '$', 'i') },
   })
-  console.log(user);
+  console.log("user in controller "+user);
   if (!user) {
     return res
       .status(404)
@@ -35,7 +35,7 @@ const getUser = async (req, res) => {
     results: userPosts,
     next: paginated.results.next,
   };
-
+  console.log("get user"+user);
   res.status(200).json({ userDetails: user, posts: paginatedPosts });
 };
 

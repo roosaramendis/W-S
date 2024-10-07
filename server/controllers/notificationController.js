@@ -7,6 +7,7 @@ const emailSender = async ({
   subject,
   html,
 }) => {
+  console.log("notify email "+reciverEmail);// having a bug here 
   const transporter = nodemailer.createTransport({
     service: 'Gmail', // Or your email service
     auth: {

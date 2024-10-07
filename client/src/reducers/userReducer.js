@@ -1,7 +1,7 @@
 import authService from '../services/auth';
 import userService from '../services/user';
 import storageService from '../utils/localStorage';
-
+import { useHistory } from 'react-router-dom';
 const userReducer = (state = null, action) => {
   switch (action.type) {
     case 'LOGIN':
@@ -23,7 +23,12 @@ const userReducer = (state = null, action) => {
     case 'UPDATE_Birthyear': // Update the username in the state
     return { ...state, year: action.payload };
     case 'UPDATE_Role': // Update the username in the state
-    return { ...state, role: action.payload };  
+    return { ...state, role: action.payload }; 
+    case 'SET_USER_DATA':
+      return {
+        ...state,
+        ...action.payload,  // Update the state with new user data
+      }; 
     //case 'OTP_VERIFIED': // Handle OTP verification
     //return { ...state, otpVerified: true };  
     default:
@@ -199,6 +204,7 @@ export const logoutUser = () => {
     dispatch({
       type: 'LOGOUT',
     });
+    
   };
 };
 

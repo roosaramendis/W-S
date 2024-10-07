@@ -20,6 +20,7 @@ import UpdateAvatarForm from './UpdateAvatarForm';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import DescriptionIcon from '@material-ui/icons/Description';
+import UserReport from './UserReport';
 
 const SettingsPage = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -33,6 +34,8 @@ const SettingsPage = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const [pageError, setPageError] = useState(null);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  console.log("settings page "+ user);
+  
   //const [showEmail, setShowEmail] = useState(user.showEmail);
   const useStyles = makeStyles((theme) => ({
     tab: {
@@ -98,6 +101,8 @@ const SettingsPage = () => {
     role,
     birthyear,
   } = userInfo.userDetails;
+
+ 
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -186,6 +191,7 @@ const SettingsPage = () => {
             handleChangeAvatarClick={handleChangeAvatarClick}
             showEmail={true}
             classes1={classes1}
+            userInfo={userInfo}
           />
         </TabPanel>
         <TabPanel value={tabValue} index={2}>
@@ -225,16 +231,29 @@ const TabPanel = (props) => {
   );
 };
 
-const ProfileTab = ({ searchTerm, userName, user, avatar,classes, handleChangeAvatarClick,showEmail, classes1, bYear }) => {
+const ProfileTab = ({ searchTerm, userName, user, avatar,classes, handleChangeAvatarClick,showEmail, classes1, bYear, userInfo }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user1 = useSelector((state) => state.user);
+  
   const [newUsername, setNewUsername] = useState(user.username);
   const [birthyear, setNewbirthyear] = useState(user.birthyear);
   const [currentPassword, setCurrentPassword] = useState('');
   const [openPasswordPrompt, setOpenPasswordPrompt] = useState(false); // Modal state
+  const [showReport, setShowReport] = useState(false);
+  console.log(user)
+ 
 
   
+
+  const handleViewReport = () => {
+    setShowReport(true);
+  };
+
+  // Function to handle closing the report (passed down to UserReport)
+  const handleCloseReport = () => {
+    setShowReport(false);
+  };
 
   const handleAddyear = async () => {
     try {
@@ -352,7 +371,19 @@ const ProfileTab = ({ searchTerm, userName, user, avatar,classes, handleChangeAv
           //onChange={() => setShowEmail((prev) => !prev)} 
           color="primary" 
         />
+        
+
       </Paper>
+      
+      <Button variant="contained" color="primary" onClick={handleViewReport}>
+        View User Report
+      </Button>
+
+      {/* Render the UserReport component if showReport is true */}
+      {showReport && (
+        
+        <UserReport userInfo={userName} onClose={handleCloseReport} />
+      )}
 
 
       <Dialog open={openPasswordPrompt} onClose={() => setOpenPasswordPrompt(false)}>

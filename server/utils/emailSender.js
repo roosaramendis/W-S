@@ -3,14 +3,12 @@ const emailSender = async ({
     subject,
     html,
   }) => {
+    console.log("notify mail "+senderEmail)
     const transporter = nodemailer.createTransport({
-      service: process.env.SMTP_SERVICE,
-      host: process.env.SMTP_HOST,
-      port: 465,
-      secure: true,
+      service: 'Gmail', // Or your email service
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASS, // Your email password
       },
     });
   

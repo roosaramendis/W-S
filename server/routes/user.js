@@ -29,6 +29,27 @@ router.delete('/:id', async (req, res) => {
     res.status(500).send({ error: 'Server error while deleting user' });
   }
 });
+
+router.get('/user/:username', async (req, res) => {
+  try {
+    console.log("Received request for username:", req.params.username);
+    // Get the username from the request parameters
+    const username = req.params.username;
+
+    // Fetch the user from the database by username
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Send back user data
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 router.put('/birth-year', updatebirthyear);
 router.put('/user-role', updateUserRole);
 router.get('/name/:id',getUsernameById)

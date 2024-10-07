@@ -26,12 +26,14 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { useHistory } from 'react-router-dom';
 
 const DesktopUserMenu = ({ user, handleLogout }) => {
   const classes = useUserMenuStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationCount, setNotificationCount] = useState(0); // Move notificationCount here
   const [panelOpen, setPanelOpen] = useState(false);
+  const history = useHistory();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,6 +45,7 @@ const DesktopUserMenu = ({ user, handleLogout }) => {
   const handleLogoutClick = () => {
     handleClose();
     handleLogout();
+    history.push('/');
   };
 
   const handlePanelToggle = () => {
