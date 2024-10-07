@@ -21,9 +21,7 @@ const userReducer = (state = null, action) => {
     return { ...state, username: action.payload };
     
     case 'UPDATE_Birthyear': // Update the username in the state
-    return { ...state, year: action.payload };
-    case 'UPDATE_Role': // Update the username in the state
-    return { ...state, role: action.payload };  
+    return { ...state, username: action.payload };  
     //case 'OTP_VERIFIED': // Handle OTP verification
     //return { ...state, otpVerified: true };  
     default:
@@ -101,30 +99,6 @@ export const updatebirthyear = (userId, newBirthyear) => {
   };
 };
 
-export const updateUserRole = (email, newRole) => {
-  return async (dispatch) => {
-    try {
-      // Make the API call to update the username in MongoDB
-     
-      console.log("in user reducer update role of "+email+" to "+newRole);
-      const updatedRole = await userService.updateUserRole(email, newRole);
-      
-      // Dispatch an action to update the username in the state
-      dispatch({
-        type: 'UPDATE_Role',
-        payload: updatedRole.newRole, // Assuming the API returns the updated user data
-      });
-      
-    
-
-    } catch (error) {
-      console.log(error);
-      console.error('Error updating birthyear:', error);
-      
-      // Handle error state as needed
-    }
-  };
-};
 
 
 // Send OTP action
@@ -179,7 +153,6 @@ export const loginUser = (credentials) => {
 
 export const signupUser = (credentials) => {
   return async (dispatch) => {
-    console.log("singupuserreduser")
     const user = await authService.signup(credentials);
     storageService.saveUser(user);
     authService.setToken(user.token);
